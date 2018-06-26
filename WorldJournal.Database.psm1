@@ -23,11 +23,28 @@ Function Query-Database{
     $conn            = New-Object Oracle.ManagedDataAccess.Client.OracleConnection($connString)
     $cmd             = $conn.CreateCommand()
     $cmd.CommandText = ($Query -replace '(^\s+|\s+$)','' -replace '\s+',' ')
-    $conn.open()
+    
+    try{
+
+        $conn.open()
+
+    }catch{
+
+        return "CONNECTION ERROR"
+
+    }
 
     if($conn.State -eq "Open"){
 
-        $reader = $cmd.ExecuteReader()
+        try{
+
+            $reader = $cmd.ExecuteReader()
+
+        }catch{
+
+            return "READER ERROR"
+        
+        }
 
         if($reader.HasRows){
 
@@ -49,7 +66,7 @@ Function Query-Database{
 
         }else{
 
-            #READER HAS NO ROWS
+            return "READER HAS NO ROWS"
 
         }
 
@@ -57,7 +74,7 @@ Function Query-Database{
 
     }else{
 
-        #CONNECTION NOT OPEN
+        return "CONNECTION NOT OPEN"
 
     }
 
