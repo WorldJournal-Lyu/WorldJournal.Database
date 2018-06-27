@@ -88,7 +88,7 @@ Function Query-Database{
 
     }catch{
 
-        return "CONNECTION ERROR"
+        return "CONNECTION ERROR: " + $_.Exception.Message
 
     }
 
@@ -100,7 +100,7 @@ Function Query-Database{
 
         }catch{
 
-            return "READER ERROR"
+            return "READER ERROR: " + $_.Exception.Message
         
         }
 
