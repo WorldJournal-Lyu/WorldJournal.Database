@@ -6,9 +6,17 @@ WorldJournal.Database.psm1
 
 #>
 
-Add-Type -Path "C:\Oracle\instantclient_10_2\odp.net\managed\common\Oracle.ManagedDataAccess.dll"
-Add-Type -Path "C:\ODP.NET_Managed_ODAC12cR4\odp.net\managed\common\Oracle.ManagedDataAccess.dll"
-Add-Type -Path "C:\Oracle\odp.net\managed\common\Oracle.ManagedDataAccess.dll"
+$dllPath = New-Object System.Collections.ArrayList
+$dllPath.Add("C:\Oracle\odp.net\managed\common\Oracle.ManagedDataAccess.dll")
+$dllPath.Add("C:\Oracle\instantclient_10_2\odp.net\managed\common\Oracle.ManagedDataAccess.dll")
+$dllPath.Add("C:\ODP.NET_Managed_ODAC12cR4\odp.net\managed\common\Oracle.ManagedDataAccess.dll")
+
+$dllPath | ForEach-Object{
+    if(Test-Path $_){
+        Add-Type -Path $_
+    }
+}
+
 $xmlPath = (Split-Path (Split-Path (Split-Path ($MyInvocation.MyCommand.Path) -Parent) -Parent) -Parent)+"\_DoNotRepository\"+(($MyInvocation.MyCommand.Name) -replace '.psm1', '.xml')
 [xml]$xml = Get-Content $xmlPath -Encoding UTF8
 
